@@ -557,10 +557,11 @@ void main_menu() {
     cout << "2. Load Game" << endl;
     cout << "3. Change Name" << endl;
     cout << "4. Leaderboard" << endl;
-    cout << "5. Quit" << endl;
+    cout << "5. Show score" << endl;
+    cout << "6. Quit" << endl;
     cout << RESET;
     char ch = getch();
-    if(ch >= '1' && ch <= '5') {
+    if(ch >= '1' && ch <= '6') {
         clean();
         if(ch == '1') {
             create_game();
@@ -574,6 +575,11 @@ void main_menu() {
             change_name();
         else if(ch == '4')
             print_leaderboard();
+        else if(ch == '5') {
+            clean();
+            cout << GREEN << player.name << " You have " << RED << player.points << GREEN << " points\n" << RESET;
+            return main_menu();
+        }
         else {
             cout << MAGENTA << "Bye :(" << RESET << endl;
             exit(0);
