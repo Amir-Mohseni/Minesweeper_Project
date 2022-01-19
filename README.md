@@ -1,5 +1,5 @@
 # Minesweeper_Project
-This was my project for my ITP class.
+This was my ITP class project.
 The commands to play are as the following:
 1. W A S D to move the pointer
 2. Space to open a mine
