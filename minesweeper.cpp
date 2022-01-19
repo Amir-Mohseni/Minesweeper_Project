@@ -1,5 +1,7 @@
 #include <iostream>
 #include <random>
+#include <algorithm>
+#include <string.h>
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
