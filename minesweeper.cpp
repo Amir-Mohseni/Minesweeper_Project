@@ -189,12 +189,34 @@ struct game_file {
     double time_limit;
     int a[N][N], b[N][N];
     bool used[N][N], flagged[N][N];
+    string dd, mm, yy, time_of_save;
 };
 
 game_file convert_to_gamefile() {
     game_file ret;
     ret.n = n, ret.bombs = bombs, ret.pos_x = pos_x, ret.pos_y = pos_y, ret.flag_count = flag_count, ret.cnt_good = cnt_good, ret.time_limit = time_limit;
     memcpy(ret.a, a, sizeof a), memcpy(ret.b, b, sizeof b), memcpy(ret.used, used, sizeof used), memcpy(ret.flagged, flagged, sizeof flagged);
+    string date_cap = __DATE__;
+    string get_time;
+    system("> temp.txt");
+    system("date +%T > ./temp.txt");
+    ifstream MyFile("./temp.txt");
+    MyFile >> get_time;
+    MyFile.close();
+    ret.time_of_save = get_time;
+    int index_c = 0;
+    for (auto c : date_cap) {
+        if(c == ' ')
+            index_c++;
+        else {
+            if(!index_c)
+                ret.mm += c;
+            else if(index_c == 1)
+                ret.dd += c;
+            else
+                ret.yy += c;
+        }
+    }
     return ret;
 }
 
@@ -206,7 +228,7 @@ void save_game(game_file now) {
     vec.push_back(now);
     for (int i = 0; i < tc; i++) {
         game_file cur;
-        MyReadFile >> cur.n >> cur.bombs >> cur.pos_x >> cur.pos_y >> cur.flag_count >> cur.cnt_good >> cur.time_limit;
+        MyReadFile >> cur.n >> cur.bombs >> cur.pos_x >> cur.pos_y >> cur.flag_count >> cur.cnt_good >> cur.time_limit >> cur.dd >> cur.mm >> cur.yy >> cur.time_of_save;
         for (int j = 0; j < N; j++)
             for (int k = 0; k < N; k++)
                 MyReadFile >> cur.a[j][k];
@@ -228,7 +250,7 @@ void save_game(game_file now) {
     tc = vec.size();
     for (int i = 0; i < tc; i++) {
         game_file cur = vec[i];
-        MyFile << cur.n << " " << cur.bombs << " " << cur.pos_x << " " << cur.pos_y << " " << cur.flag_count << " " << cur.cnt_good << " " << cur.time_limit << "\n";
+        MyFile << cur.n << " " << cur.bombs << " " << cur.pos_x << " " << cur.pos_y << " " << cur.flag_count << " " << cur.cnt_good << " " << cur.time_limit << " " << cur.dd << " " << cur.mm << " " << cur.yy << " " << cur.time_of_save << "\n";
         for (int j = 0; j < N; j++, MyFile << "\n")
             for (int k = 0; k < N; k++)
                 MyFile << cur.a[j][k] << " ";
@@ -257,7 +279,7 @@ void load_file() {
     vector <game_file> vec;
     for (int i = 0; i < tc; i++) {
         game_file cur;
-        MyReadFile >> cur.n >> cur.bombs >> cur.pos_x >> cur.pos_y >> cur.flag_count >> cur.cnt_good >> cur.time_limit;
+        MyReadFile >> cur.n >> cur.bombs >> cur.pos_x >> cur.pos_y >> cur.flag_count >> cur.cnt_good >> cur.time_limit >> cur.dd >> cur.mm >> cur.yy >> cur.time_of_save;
         for (int j = 0; j < N; j++)
             for (int k = 0; k < N; k++)
                 MyReadFile >> cur.a[j][k];
@@ -276,7 +298,7 @@ void load_file() {
         cout << YELLOW << "Please enter the save file you want to play" << RESET << "\n";
         cout << GREEN;
         for (int i = 0; i < tc; i++)
-            cout << i + 1 << ". Size: " << vec[i].n << " | Number of Bombs: " << vec[i].bombs << " | Number of flags: " << vec[i].flag_count << "\n";
+            cout << i + 1 << ". Size: " << vec[i].n << " | Number of Bombs: " << vec[i].bombs << " | Number of flags: " << vec[i].flag_count << " | Date and Time: " << vec[i].dd << "/" << vec[i].mm << "/" << vec[i].yy << " " << vec[i].time_of_save << "\n";
         cout << RESET;
         cin >> idx;
         idx--;
